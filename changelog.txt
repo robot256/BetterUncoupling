@@ -1,0 +1,12 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.18.1
+Date: 25. 04. 2020
+  Features:
+    - Added new "disconnect-locomotive" control (Shift-V) to separate train at the nearest locomotive-to-wagon connection.
+  Bugfixes:
+    - Improved information text behavior and locale strings.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.0
+  Features:
+    - Initial version of the mod
+    - Makes "disconnect-train" control prefer to separate locomotives from wagons.
