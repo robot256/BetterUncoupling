@@ -3,25 +3,29 @@
  * File: control.lua
  * Description:  Main runtime control script and event handling.
  *   Events handled:
- *   - on_lua_shortcut
+ *   - Custom contro "better-disconnect-train"
+ *   -Custom control "better-disconnect-locomotive"
 --]]
-
-Position = require('__stdlib__/stdlib/area/position')
 
 
 -- global.player_data:
 --   rolling_stock 
 
+local function midpoint(a, b)
+  return {x=(a.x+b.x)/2, y=(a.y+b.y)/2}
+end
+
+
 --== ON_INIT ==--
 -- Initialize global data tables
-function OnInit()
+local function OnInit()
   global.player_data = {}
 end
 script.on_init(OnInit)
 
 
 --== ON_CONFIGURATION_CHANGED ==--
-function OnConfigurationChanged()
+local function OnConfigurationChanged()
   global.player_data = global.player_data or {}
 end
 script.on_configuration_changed(OnConfigurationChanged)
@@ -29,7 +33,7 @@ script.on_configuration_changed(OnConfigurationChanged)
 
 --== ON_EVENT("better-disconnect-train") ==--
 -- Replace the default disconnect behavior so that it prefers to uncouple an adjacent 
-function OnDisconnectTrain(event)
+local function OnDisconnectTrain(event)
   -- Check if player is riding in train
   local player = game.players[event.player_index]
   local text_position = nil
@@ -80,10 +84,10 @@ function OnDisconnectTrain(event)
                                   y=(math.sin(wagon_orientation)*vector.x-math.cos(wagon_orientation)*vector.y)}
           if rotated_vector.y > 1 then
             front_wagon = wagon1
-            front_text_position = Position.between(wagon1.position, wagon.position)
+            front_text_position = midpoint(wagon1.position, wagon.position)
           elseif rotated_vector.y < -1 then
             back_wagon = wagon1
-            back_text_position = Position.between(wagon1.position, wagon.position)
+            back_text_position = midpoint(wagon1.position, wagon.position)
           end
         end
         if wagon2 and wagon2.valid then
@@ -94,10 +98,10 @@ function OnDisconnectTrain(event)
                                   y=(math.sin(wagon_orientation)*vector.x-math.cos(wagon_orientation)*vector.y)}
           if rotated_vector.y > 1 then
             front_wagon = wagon2
-            front_text_position = Position.between(wagon2.position, wagon.position)
+            front_text_position = midpoint(wagon2.position, wagon.position)
           elseif rotated_vector.y < -1 then
             back_wagon = wagon2
-            back_text_position = Position.between(wagon2.position, wagon.position)
+            back_text_position = midpoint(wagon2.position, wagon.position)
           end
         end
         
@@ -151,7 +155,7 @@ script.on_event("better-disconnect-train", OnDisconnectTrain)
 
 --== ON_EVENT("better-disconnect-locomotive") ==--
 -- This control will only act if player is in a locomotive, and will disconnect the closest wagon
-function OnDisconnectLocomotive(event)
+local function OnDisconnectLocomotive(event)
   -- Check if player is riding in train
   local player = game.players[event.player_index]
   local text_position = nil
@@ -203,7 +207,7 @@ function OnDisconnectLocomotive(event)
             local wagon_orientation = math.rad(wagon1a.orientation*360)
             local rotated_vector = {x=(math.cos(wagon_orientation)*vector.x+math.sin(wagon_orientation)*vector.y), 
                                     y=(math.sin(wagon_orientation)*vector.x-math.cos(wagon_orientation)*vector.y)}
-            text_position = Position.between(wagon1.position, wagon1a.position)
+            text_position = midpoint(wagon1.position, wagon1a.position)
             if rotated_vector.y > 1 then
               wagon1a.disconnect_rolling_stock(defines.rail_direction.front)
             elseif rotated_vector.y < -1 then
