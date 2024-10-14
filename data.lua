@@ -15,22 +15,6 @@ data:extend{
   {
     type="custom-input",
     name="better-disconnect-locomotive",
-    key_sequence="SHIFT + V",
-  },
-  {
-    type = "flying-text",
-    name = "better-disconnect-success-flying-text",
-    flags = {"not-on-map", "placeable-off-grid"},
-    time_to_live = 80,
-    speed = 0.04,
-    text_alignment = "center"
-  },
-  {
-    type = "flying-text",
-    name = "better-disconnect-failure-flying-text",
-    flags = {"not-on-map", "placeable-off-grid"},
-    time_to_live = 120,
-    speed = 0.031,
-    text_alignment = "center"
-  },
+    key_sequence="SHIFT + K",
+  }
 }

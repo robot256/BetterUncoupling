@@ -4,11 +4,11 @@
  * Description:  Main runtime control script and event handling.
  *   Events handled:
  *   - Custom contro "better-disconnect-train"
- *   -Custom control "better-disconnect-locomotive"
+ *   - Custom control "better-disconnect-locomotive"
 --]]
 
 
--- global.player_data:
+-- storage.player_data:
 --   rolling_stock 
 
 local function midpoint(a, b)
@@ -17,16 +17,16 @@ end
 
 
 --== ON_INIT ==--
--- Initialize global data tables
+-- Initialize storage data tables
 local function OnInit()
-  global.player_data = {}
+  storage.player_data = {}
 end
 script.on_init(OnInit)
 
 
 --== ON_CONFIGURATION_CHANGED ==--
 local function OnConfigurationChanged()
-  global.player_data = global.player_data or {}
+  storage.player_data = storage.player_data or {}
 end
 script.on_configuration_changed(OnConfigurationChanged)
 
@@ -133,8 +133,7 @@ local function OnDisconnectTrain(event)
             text_position = front_text_position
           end
           
-          player.surface.create_entity({name = "better-disconnect-success-flying-text", position = text_position, 
-                                        text = {"rolling-stock-disconnected"}, render_player = player})
+          player.create_local_flying_text{position = text_position, text = {"rolling-stock-disconnected"}}
         else
           text = {"no-stock-to-disconnect-found"}
         end
@@ -146,7 +145,7 @@ local function OnDisconnectTrain(event)
     end
     
     if text then
-      player.surface.create_entity({name = "better-disconnect-failure-flying-text", position = text_position, text = text, render_player = player})
+      player.create_local_flying_text{position = text_position, text = text}
     end
   end -- player
 end
@@ -214,8 +213,7 @@ local function OnDisconnectLocomotive(event)
               wagon1a.disconnect_rolling_stock(defines.rail_direction.back)
             end
             
-            player.surface.create_entity({name = "better-disconnect-success-flying-text", position = text_position,
-                                          text = {"rolling-stock-disconnected"}, render_player = player})
+            player.create_local_flying_text{position = text_position, text = {"rolling-stock-disconnected"}}
           else
             text = {"no-wagons-to-disconnect-found"}
           end
@@ -230,7 +228,7 @@ local function OnDisconnectLocomotive(event)
     end
     
     if text then
-      player.surface.create_entity({name = "better-disconnect-failure-flying-text", position = text_position, text = text, render_player = player})
+      player.create_local_flying_text{position = text_position, text = text}
     end
   end -- player
 end
